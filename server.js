@@ -11,14 +11,13 @@ app.use(cors());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const router = express.Router();
 
 // Define a route for the root path
-router.get('/', (req, res) => {
+app.get('/', (req, res) => {
   res.send('Welcome to the Food Server!');
 });
 
-router.get('/api/swiggy/getData', async (req, res) => {
+app.get('/api/swiggy/getData', async (req, res) => {
   try {
     const {lat, lng} = req.query;
 
@@ -53,7 +52,7 @@ router.get('/api/swiggy/getData', async (req, res) => {
 
 
 
-router.post('/api/swiggy/update', async (req, res) => {
+app.post('/api/swiggy/update', async (req, res) => {
   try {
     const payload = req.body;
     // const payload = {
@@ -106,7 +105,7 @@ router.post('/api/swiggy/update', async (req, res) => {
 });
 
 
-router.get('/api/swiggy/getMenu', async (req, res) => {
+app.get('/api/swiggy/getMenu', async (req, res) => {
   try {
     const {restaurantId, lat, lng} = req.query;
 
