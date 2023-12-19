@@ -4,19 +4,21 @@ const axios = require('axios');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Enable CORS for all routes
 app.use(cors());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const router = express.Router();
+
 // Define a route for the root path
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.send('Welcome to the Food Server!');
 });
 
-app.get('/api/swiggy/getData', async (req, res) => {
+router.get('/api/swiggy/getData', async (req, res) => {
   try {
     const {lat, lng} = req.query;
 
@@ -51,7 +53,7 @@ app.get('/api/swiggy/getData', async (req, res) => {
 
 
 
-app.post('/api/swiggy/update', async (req, res) => {
+router.post('/api/swiggy/update', async (req, res) => {
   try {
     const payload = req.body;
     // const payload = {
@@ -104,7 +106,7 @@ app.post('/api/swiggy/update', async (req, res) => {
 });
 
 
-app.get('/api/swiggy/getMenu', async (req, res) => {
+router.get('/api/swiggy/getMenu', async (req, res) => {
   try {
     const {restaurantId, lat, lng} = req.query;
 
@@ -139,6 +141,7 @@ app.get('/api/swiggy/getMenu', async (req, res) => {
 });
 
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
+
