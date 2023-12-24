@@ -140,6 +140,41 @@ app.get('/api/swiggy/getMenu', async (req, res) => {
 });
 
 
+app.get('/api/swiggy/getRecipesData', async (req, res) => {
+  try {
+    const query = req.query;
+    console.log(query)
+    // return "";
+    const url = `https://www.swiggy.com/dapi/restaurants/list/v5?lat=26.8289443&lng=75.8056178&collection=${query?.collection_id}&tags=${query?.tags}&sortBy=&filters=&type=${query?.type}&offset=0&page_type=null`
+    const swiggyApiResponse = await axios.get(url, {
+      headers: {
+        'Accept': '*/*',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'application/json',
+        'Dnt': '1',
+        'Pragma': 'no-cache',
+        'Referer': 'https://www.swiggy.com/',
+        'Sec-Ch-Ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': '"Windows"',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        // Add any additional headers if necessary
+      },
+    });
+    const swiggyApiData = swiggyApiResponse.data;
+    res.json(swiggyApiData);
+  } catch (error) {
+    console.error('Error fetching data from Swiggy:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
