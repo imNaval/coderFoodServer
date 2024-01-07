@@ -55,23 +55,6 @@ app.get('/api/swiggy/getData', async (req, res) => {
 app.post('/api/swiggy/update', async (req, res) => {
   try {
     const payload = req.body;
-    // const payload = {
-    //   lat: 26.8289443,
-    //   lng: 75.8056178,
-    //   nextOffset: "COVCELQ4KICAltS6qvXEVzCnEzgE",
-    //   page_type: "DESKTOP_WEB_LISTING",
-    //   seoParams: {
-    //     seoUrl: "https://www.swiggy.com/",
-    //     pageType: "FOOD_HOMEPAGE",
-    //     apiName: "FoodHomePage"
-    //   },
-    //   widgetOffset: {
-    //     NewListingView_Topical_Fullbleed: "",
-    //     NewListingView_category_bar_chicletranking_TwoRows: "",
-    //     // Add other properties as needed
-    //   },
-    //   _csrf: "RtB0TQWxn2YI-jJGHr9w2jYSzM4QjFO4dNUnco2w",
-    // };
 
     const swiggyApiResponse = await axios.post('https://www.swiggy.com/dapi/restaurants/list/update', payload, {
       headers: {
@@ -173,6 +156,27 @@ app.get('/api/swiggy/getRecipesData', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+app.get('/api/youtube/get/search', async(req, res) => {
+  try{
+    const query = req.query.q
+    console.log(query)
+    // console.log(req.headers)
+    const url = "http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=" + query
+    const searchResponse = await axios.get(url, {
+      ...req.headers,
+      'Referer': 'http://suggestqueries.google.com/',
+      'Content-Type': 'application/json',
+    })
+    
+    console.log(searchResponse)
+    const searchResults = searchResponse.data
+    res.json(searchResults)
+  }catch(error){
+    console.error('Error fetching data from youtube:', error);
+    res.status(500).send('Internal Server Error');
+  }
+})
 
 
 app.listen(PORT, () => {
